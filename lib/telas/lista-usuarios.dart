@@ -4,6 +4,9 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ListaUsuarios extends StatelessWidget {
+  String? nome;
+  String? descricao;
+
   Future<List<Map<String, Object?>>> buscarDados2() async {
     String caminhBD = join(await getDatabasesPath(), 'banco.db');
     Database banco =
@@ -26,6 +29,15 @@ class ListaUsuarios extends StatelessWidget {
     List<Map<String, Object?>> usuario =
     await banco.rawQuery('SELECT * FROM usuario');
     return usuario;
+  }
+
+  excluir(int id)async{
+
+    var caminho = join(await getDatabasesPath(), 'banco.db');
+    var banco = await openDatabase(caminho);
+    String sql;
+    sql = 'DELETE FROM usuario WHERE id=?';
+    banco.rawDelete(sql, [id]);
   }
 
   @override
@@ -64,7 +76,18 @@ class ListaUsuarios extends StatelessWidget {
                   ),
                   title: Text(usuarios['nome'].toString()),
                   subtitle: Text(usuarios['descricao'].toString()),
-                  trailing: const Icon(Icons.arrow_forward_ios_outlined),
+                  trailing:
+                    IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () {
+                      excluir(int.parse(usuarios['id'].toString()));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => this));
+                    }
+                  ),
+
                 ),
               );
             },
