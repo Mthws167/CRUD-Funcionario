@@ -66,27 +66,36 @@ class ListaUsuarios extends StatelessWidget {
               return Card(
                 elevation: 4,
                 margin: const EdgeInsets.all(8),
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.black,
-                    child: Text(usuario[index]["nome"]
-                        .toString()
-                        .substring(0, 1)
-                        .toUpperCase()),
-                  ),
-                  title: Text(usuarios['nome'].toString()),
-                  subtitle: Text(usuarios['descricao'].toString()),
-                  trailing:
-                    IconButton(
-                    icon: Icon(Icons.delete),
+                child:ListTile(
+                  title: Text(tarefa['nome'].toString()),
+                  subtitle: Text(tarefa['descricao'].toString()),
+                  trailing: ElevatedButton(
+                    child: Icon(Icons.delete),
                     onPressed: () {
-                      excluir(int.parse(usuarios['id'].toString()));
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => this));
-                    }
-                  ),
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              content: Text("Tem certeza que deseja excluir?"),
+                              actions: [
+                                ElevatedButton(
+                                  child: Text("Sim"),
+                                  onPressed: () {
+                                    TarefaForm form = new TarefaForm();
+                                    form.excluir(
+                                        int.parse(tarefa['id'].toString()));
+                                    Navigator.pushNamed(context, '/');
+                                  },
+                                ),
+                                ElevatedButton(
+                                  child: Text("Não"),
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, '/');
+                                  },
+                                ),
+                              ],
+                            );
+                          });
 
                 ),
               );
