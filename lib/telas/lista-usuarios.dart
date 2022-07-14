@@ -65,7 +65,7 @@ class ListaUsuarios extends StatelessWidget {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   content:
-                                      Text("Tem certeza que deseja excluir?"),
+                                      Text("Deseja excluir?"),
                                   actions: [
                                     ElevatedButton(
                                       child: Text("Sim"),
