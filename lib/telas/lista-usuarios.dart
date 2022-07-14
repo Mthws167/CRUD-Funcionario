@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../main.dart';
+import 'add-usuario.dart';
+
 class ListaUsuarios extends StatelessWidget {
   String? nome;
   String? descricao;
@@ -10,7 +13,7 @@ class ListaUsuarios extends StatelessWidget {
   Future<List<Map<String, Object?>>> buscarDados2() async {
     String caminhBD = join(await getDatabasesPath(), 'banco.db');
     Database banco =
-    await openDatabase(caminhBD, version: 1, onCreate: (db, version) {
+        await openDatabase(caminhBD, version: 1, onCreate: (db, version) {
       db.execute(''' 
         CREATE TABLE usuario(
           id INTEGER PRIMARY KEY,
@@ -18,26 +21,11 @@ class ListaUsuarios extends StatelessWidget {
           descricao TEXT NOT NULL
         )
       ''');
-      db.execute(
-          'INSERT INTO usuario (nome, email ) VALUES ("Matheus", "mthws.henrique@hotmail.com")');
-      db.execute(
-          'INSERT INTO usuario (nome, email ) VALUES ("Igor", "igor.email@hotmail.br")');
-      db.execute(
-          'INSERT INTO usuario (nome, email ) VALUES ("Fulano", "ciclano@@beltrano.com")');
     });
 
     List<Map<String, Object?>> usuario =
-    await banco.rawQuery('SELECT * FROM usuario');
+        await banco.rawQuery('SELECT * FROM usuario');
     return usuario;
-  }
-
-  excluir(int id)async{
-
-    var caminho = join(await getDatabasesPath(), 'banco.db');
-    var banco = await openDatabase(caminho);
-    String sql;
-    sql = 'DELETE FROM usuario WHERE id=?';
-    banco.rawDelete(sql, [id]);
   }
 
   @override
@@ -64,41 +52,44 @@ class ListaUsuarios extends StatelessWidget {
               var usuarios = usuario[index];
 
               return Card(
-                elevation: 4,
-                margin: const EdgeInsets.all(8),
-                child:ListTile(
-                  title: Text(tarefa['nome'].toString()),
-                  subtitle: Text(tarefa['descricao'].toString()),
-                  trailing: ElevatedButton(
-                    child: Icon(Icons.delete),
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              content: Text("Tem certeza que deseja excluir?"),
-                              actions: [
-                                ElevatedButton(
-                                  child: Text("Sim"),
-                                  onPressed: () {
-                                    TarefaForm form = new TarefaForm();
-                                    form.excluir(
-                                        int.parse(tarefa['id'].toString()));
-                                    Navigator.pushNamed(context, '/');
-                                  },
-                                ),
-                                ElevatedButton(
-                                  child: Text("Não"),
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, '/');
-                                  },
-                                ),
-                              ],
-                            );
-                          });
-
-                ),
-              );
+                  elevation: 4,
+                  margin: const EdgeInsets.all(8),
+                  child: ListTile(
+                    title: Text(usuarios['nome'].toString()),
+                    subtitle: Text(usuarios['descricao'].toString()),
+                    trailing: FlatButton(
+                        child: Icon(Icons.delete,color: Colors.black38,),
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  content:
+                                      Text("Tem certeza que deseja excluir?"),
+                                  actions: [
+                                    ElevatedButton(
+                                      child: Text("Sim"),
+                                      onPressed: () {
+                                        AddUsuario form = new AddUsuario();
+                                        form.excluir(int.parse(
+                                            usuarios['id'].toString()));
+                                        Navigator.push(context, new MaterialPageRoute(
+                                            builder:(context)=> MyApp()
+                                        ));
+                                      },
+                                    ),
+                                    ElevatedButton(
+                                      child: Text("Não"),
+                                      onPressed: () {
+                                        Navigator.pop(context
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                );
+                              });
+                        }),
+                  ));
             },
           );
         },

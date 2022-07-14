@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../main.dart';
+
 class AddUsuario extends StatelessWidget {
   String? nome;
   String? descricao;
+
 
   salvar(BuildContext context, int? id, String? nome, String? descricao) async {
     var caminho = join(await getDatabasesPath(), 'banco.db');
@@ -21,7 +24,9 @@ class AddUsuario extends StatelessWidget {
       banco.rawUpdate(sql, [nome, descricao, id]);
     }
 
-    Navigator.pushNamed(context, '/');
+    Navigator.push(context, new MaterialPageRoute(
+        builder:(context)=> MyApp()
+    ));
   }
 
   cadastrar(int? id, String nome, String descricao) async {
@@ -37,6 +42,15 @@ class AddUsuario extends StatelessWidget {
       sql = 'UPDATE usuario SET nome = ?, descricao = ? WHRE id = ?';
       banco.rawUpdate(sql, [nome, descricao, id]);
     }
+  }
+
+  Future<int> excluir(int id) async {
+    String caminho = join(await getDatabasesPath(), 'banco.db');
+    Database banco = await openDatabase(caminho, version: 1);
+    String sql = "DELETE FROM usuario WHERE id = ?";
+    Future<int> linhaAfetada;
+    linhaAfetada = banco.rawDelete(sql, [id]);
+    return linhaAfetada;
   }
 
   @override
