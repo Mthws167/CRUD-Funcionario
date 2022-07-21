@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../telas/lista-usuarios.dart';
-import '../telas/add-usuario.dart';
+import 'package:untitled/telas/edit-funcionario.dart';
+import '../telas/lista-funcionario.dart';
+import '../telas/add-funcionario.dart';
 
 
 void main() {
@@ -15,11 +16,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
+        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.teal),
       ),
       routes: {
-        '/': (context) => ListaUsuarios(),
-        '/addUsuarios':(context) => AddUsuario(),
+        '/': (context) => ListaFuncionario(),
+        '/addFuncionario':(context) => AddFuncionario(),
+        '/editFuncionario':(context) => EditFuncionario(),
       },
     );
   }
