@@ -9,7 +9,7 @@ class ListaFuncionario extends StatelessWidget{
   const ListaFuncionario({Key? key}) : super(key: key);
 
   Future<List<Map<String,Object?>>> consultar2() async {
-    String caminho = join(await getDatabasesPath(), 'banco1.db');
+    String caminho = join(await getDatabasesPath(), 'banco2.db');
     Database bd = await openDatabase(
       caminho,
       onCreate: (db, version) {
@@ -22,17 +22,17 @@ class ListaFuncionario extends StatelessWidget{
   }
 
   Future<List<Map<String, Object?>>> consultar() async {
-    await Future.delayed(const Duration(seconds: 3));
-    String path = join(await getDatabasesPath(), 'banco1.db');
+    await Future.delayed(const Duration(seconds: 1));
+    String path = join(await getDatabasesPath(), 'banco2.db');
     //deleteDatabase(path);
     Database database = await openDatabase(
       path,
       version: 1,
       onCreate: (db, v){
-        db.execute('CREATE TABLE funcionario(id INTEGER PRIMARY KEY, nome TEXT, funcao TEXT, cpf TEXT)');
-        db.execute('INSERT INTO funcionario(nome, funcao, cpf) VALUES("José","Dev. Júnior","251.795.620-07")');
-        db.execute('INSERT INTO funcionario(nome, funcao, cpf) VALUES("Carlos","Tech Leader","181.720.260-05")');
-        db.execute('INSERT INTO funcionario(nome, funcao, cpf) VALUES("Matheus","Estagiário","108.741.389-30")');
+        db.execute('CREATE TABLE funcionario(id INTEGER PRIMARY KEY, nome TEXT, funcao TEXT, cpf TEXT, email TEXT)');
+        db.execute('INSERT INTO funcionario(nome, funcao, cpf,email) VALUES("José","Dev. Júnior","251.795.620-07","jose@gmail.com")');
+        db.execute('INSERT INTO funcionario(nome, funcao, cpf,email) VALUES("Carlos","Tech Leader","181.720.260-05","carlos@gmail.com")');
+        db.execute('INSERT INTO funcionario(nome, funcao, cpf,email) VALUES("Matheus","Estagiário","108.741.389-30","mthws@gmail.com")');
       },
     );
     List<Map<String, Object?>> list = await database.rawQuery('SELECT * FROM funcionario');
@@ -60,7 +60,8 @@ class ListaFuncionario extends StatelessWidget{
                   itemBuilder: (context, contador){
                     var funcionario = lista[contador];
                     return ListTile(
-                      title: Text(funcionario["nome"].toString()),
+                      leading: Text(funcionario["nome"].toString()),
+                      title: Text(funcionario["email"].toString()),
                       subtitle: Text(funcionario["funcao"].toString()),
                       trailing: SizedBox(
                         width: 100,

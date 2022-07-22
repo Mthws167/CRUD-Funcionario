@@ -10,6 +10,7 @@ class Conexao {
     nome TEXT NOT NULL,
     funcao TEXT NOT NULL, 
     cpf TEXT NOT NULL, 
+    email TEXT NOT NULL,
     )''';
 
   static Future<Database> getDatabase() async {
