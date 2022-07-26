@@ -9,7 +9,7 @@ class ListaFuncionario extends StatelessWidget{
   const ListaFuncionario({Key? key}) : super(key: key);
 
   Future<List<Map<String,Object?>>> consultar2() async {
-    String caminho = join(await getDatabasesPath(), 'banco2.db');
+    String caminho = join(await getDatabasesPath(), 'banco0.db');
     Database bd = await openDatabase(
       caminho,
       onCreate: (db, version) {
@@ -23,16 +23,13 @@ class ListaFuncionario extends StatelessWidget{
 
   Future<List<Map<String, Object?>>> consultar() async {
     await Future.delayed(const Duration(seconds: 1));
-    String path = join(await getDatabasesPath(), 'banco2.db');
+    String path = join(await getDatabasesPath(), 'banco0.db');
     //deleteDatabase(path);
     Database database = await openDatabase(
       path,
       version: 1,
       onCreate: (db, v){
-        db.execute('CREATE TABLE funcionario(id INTEGER PRIMARY KEY, nome TEXT, funcao TEXT, cpf TEXT, email TEXT)');
-        db.execute('INSERT INTO funcionario(nome, funcao, cpf,email) VALUES("José","Dev. Júnior","251.795.620-07","jose@gmail.com")');
-        db.execute('INSERT INTO funcionario(nome, funcao, cpf,email) VALUES("Carlos","Tech Leader","181.720.260-05","carlos@gmail.com")');
-        db.execute('INSERT INTO funcionario(nome, funcao, cpf,email) VALUES("Matheus","Estagiário","108.741.389-30","mthws@gmail.com")');
+        db.execute('CREATE TABLE funcionario(id INTEGER PRIMARY KEY, nome TEXT, funcao TEXT, cpf TEXT, email TEXT,telefone TEXT)');
       },
     );
     List<Map<String, Object?>> list = await database.rawQuery('SELECT * FROM funcionario');

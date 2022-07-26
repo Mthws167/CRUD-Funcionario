@@ -1,3 +1,4 @@
+import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -11,22 +12,29 @@ class EditFuncionario extends StatelessWidget {
   String? funcao;
   String? cpf;
   String? email;
+  String? telefone;
+  dynamic validarEmail = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+  dynamic validarTelefone = r"^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$";
+
 
   EditFuncionario({Key? key}) : super(key: key);
 
   Future<int> salvar(BuildContext context, int? id, String? nome,
-      String? funcao, String? cpf, String? email) async {
-    String path = join(await getDatabasesPath(), 'banco2.db');
+      String? funcao, String? cpf, String? email, String? telefone) async {
+    String path = join(await getDatabasesPath(), 'banco0.db');
     //deleteDatabase(path);
     Database database = await openDatabase(path, version: 1);
     String sql;
     Future<int> linhasAfetadas;
-    if (id == null) {
-      sql = 'INSERT INTO funcionario (nome, funcao,cpf,email) VALUES (?,?,?,?)';
-      linhasAfetadas = database.rawInsert(sql, [nome, funcao, cpf,email]);
+    if (id == null && 
+        CPFValidator.isValid(cpf) && 
+        RegExp(validarEmail).hasMatch(email!) &&
+        RegExp(validarTelefone).hasMatch(telefone!)) {
+      sql = 'INSERT INTO funcionario (nome, funcao,cpf,email, telefone) VALUES (?,?,?,?,?)';
+      linhasAfetadas = database.rawInsert(sql, [nome, funcao, CPFValidator.format(cpf!),email, telefone]);
     }  else {
-      sql = 'UPDATE funcionario SET nome = ?, funcao =? , cpf=?, email=? WHERE id = ?';
-      linhasAfetadas = database.rawUpdate(sql, [nome, funcao, cpf,email, id]);
+      sql = 'UPDATE funcionario SET nome = ?, funcao =? , cpf=?, email=?,telefone=? WHERE id = ?';
+      linhasAfetadas = database.rawUpdate(sql, [nome, funcao, CPFValidator.format(cpf!),email,telefone, id]);
     }
 
     Navigator.push(
@@ -54,6 +62,7 @@ class EditFuncionario extends StatelessWidget {
       funcao = funcionario['funcao'] as String;
       cpf = funcionario['cpf'] as String;
       email = funcionario['email'] as String;
+      telefone = funcionario['telefone'] as String;
     }
 
     return Scaffold(
@@ -63,7 +72,7 @@ class EditFuncionario extends StatelessWidget {
           IconButton(
               icon: const Icon(Icons.check_box_outlined),
               onPressed: () {
-                salvar(context, id, nome, funcao, cpf,email);
+                salvar(context, id, nome, funcao, cpf,email,telefone);
                 Navigator.pop(context);
               }),
         ],
@@ -75,6 +84,8 @@ class EditFuncionario extends StatelessWidget {
             child: Column(children: [
               _criarCampo('Função:', 'Digite sua função',
                   (valorDigitado) => funcao = valorDigitado, funcao),
+              _criarCampo('Telefone:', 'Digite seu telefone',
+                      (valorDigitado) => telefone = valorDigitado, telefone),
               _criarCampo('E-mail:', 'Digite seu e-mail',
                       (valorDigitado) => email = valorDigitado, email),
             ]),

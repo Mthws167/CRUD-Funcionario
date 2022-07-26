@@ -11,11 +11,12 @@ class Conexao {
     funcao TEXT NOT NULL, 
     cpf TEXT NOT NULL, 
     email TEXT NOT NULL,
+    telefone TEXT NOT NULL,
     )''';
 
   static Future<Database> getDatabase() async {
     if (_db == null) {
-      var path = join(await getDatabasesPath(), 'banco1.db');
+      var path = join(await getDatabasesPath(), 'banco0.db');
       _db = await openDatabase(
         path,
         version: 1,
