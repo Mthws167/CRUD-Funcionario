@@ -36,6 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   sqflite:
   path:
+  cpf_cnpj_validator:
+  email_validator:
 
 dev_dependencies:
   flutter_test:

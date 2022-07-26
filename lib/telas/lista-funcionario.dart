@@ -60,8 +60,7 @@ class ListaFuncionario extends StatelessWidget{
                   itemBuilder: (context, contador){
                     var funcionario = lista[contador];
                     return ListTile(
-                      leading: Text(funcionario["nome"].toString()),
-                      title: Text(funcionario["email"].toString()),
+                      title: Text(funcionario["nome"].toString()),
                       subtitle: Text(funcionario["funcao"].toString()),
                       trailing: SizedBox(
                         width: 100,

@@ -1,4 +1,4 @@
-#Fri Jul 22 01:10:02 BRT 2022
+#Mon Jul 25 23:57:14 BRT 2022
 base.0=C\:\\Users\\mthws\\StudioProjects\\Funcionarios\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
 renamed.0=classes.dex
 path.0=classes.dex

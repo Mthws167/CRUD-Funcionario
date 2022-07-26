@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:cpf_cnpj_validator/cpf_validator.dart';
+import 'package:email_validator/email_validator.dart';
 
 import '../main.dart';
 
@@ -20,7 +22,7 @@ class AddFuncionario extends StatelessWidget{
     Database database = await openDatabase(path,version: 1);
     String sql;
     Future<int> linhasAfetadas;
-    if(id == null){
+    if(id == null && CPFValidator.isValid(cpf) && EmailValidator.validate(email!)){
       sql = 'INSERT INTO funcionario (nome, funcao,cpf,email) VALUES (?,?,?,?)';
       linhasAfetadas = database.rawInsert(sql,[nome,funcao,cpf,email]);
     }else{
