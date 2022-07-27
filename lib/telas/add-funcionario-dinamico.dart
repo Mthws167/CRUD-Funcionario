@@ -41,8 +41,7 @@ class _AddFuncionarioDinamicoState extends State<AddFuncionarioDinamico> {
       linhasAfetadas = database.rawUpdate(sql, [nome, funcao, CPFValidator.format(cpf!),email,telefone, id]);
     }
 
-    Navigator.push(
-        context, new MaterialPageRoute(builder: (context) => MyApp()));
+    Navigator.of(context).pop;
 
     return linhasAfetadas;
   }
