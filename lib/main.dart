@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:untitled/telas/edit-funcionario.dart';
-import '../telas/lista-funcionario.dart';
-import '../telas/add-funcionario.dart';
+import 'package:untitled/telas/add-funcionario-dinamico.dart';
+import 'package:untitled/telas/edit-funcionarios-dinamico.dart';
+import 'package:untitled/telas/lista-funcionarios-dinamico.dart';
 
 
 void main() {
@@ -19,9 +19,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.teal),
       ),
       routes: {
-        '/': (context) => ListaFuncionario(),
-        '/addFuncionario':(context) => AddFuncionario(),
-        '/editFuncionario':(context) => EditFuncionario(),
+        '/': (context) => const ListaFuncionarioDinamico(),
+        '/addFuncionario':(context) => const AddFuncionarioDinamico(),
+        '/editFuncionario':(context) => const EditFuncionarioDinamico(),
       },
     );
   }
