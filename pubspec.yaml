@@ -38,6 +38,7 @@ dependencies:
   path:
   cpf_cnpj_validator:
   email_validator:
+  sqflite_common_ffi:
 
 dev_dependencies:
   flutter_test:

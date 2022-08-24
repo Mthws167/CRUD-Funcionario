@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:untitled/dao/dao-list.dart';
 import 'package:untitled/telas/add-funcionario-dinamico.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 
 import '../main.dart';
 
@@ -14,48 +13,7 @@ class ListaFuncionarioDinamico extends StatefulWidget {
 }
 
 class _ListaFuncionarioDinamicoState extends State<ListaFuncionarioDinamico> {
-  Future<List<Map<String,Object?>>> consultar2() async {
-    String caminho = join(await getDatabasesPath(), 'banco0.db');
-    Database bd = await openDatabase(
-      caminho,
-      onCreate: (db, version) {
-        db.execute('');
-      },
-    );
-
-    List<Map<String,Object?>> dados = await bd.rawQuery('SELECT * FROM funcionario');
-    return dados;
-  }
-
-  Future<List<Map<String, Object?>>> consultar() async {
-    await Future.delayed(const Duration(seconds: 1));
-    String path = join(await getDatabasesPath(), 'banco0.db');
-    //deleteDatabase(path);
-    Database database = await openDatabase(
-      path,
-      version: 1,
-      onCreate: (db, v){
-        db.execute('CREATE TABLE funcionario(id INTEGER PRIMARY KEY, nome TEXT, funcao TEXT, cpf TEXT, email TEXT,telefone TEXT)');
-      },
-    );
-    List<Map<String, Object?>> list = await database.rawQuery('SELECT * FROM funcionario');
-    return list;
-  }
-
-
-
-  Future<int> excluir(int id) async {
-    String caminho = join(await getDatabasesPath(), 'banco0.db');
-    Database banco2 = await openDatabase(caminho, version: 1);
-    String sql = "DELETE FROM funcionario WHERE id = ?";
-    Future<int> linhaAfetada;
-    linhaAfetada = banco2.rawDelete(sql, [id]);
-    setState(() {
-
-    });
-    return linhaAfetada;
-  }
-
+  DaoList daoList = DaoList();
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +36,8 @@ class _ListaFuncionarioDinamicoState extends State<ListaFuncionarioDinamico> {
                   itemBuilder: (context, contador){
                     var funcionario = lista[contador];
                     return ListTile(
-                      title: Text(funcionario["nome"].toString()),
+                      leading: Text(funcionario["nome"].toString()),
+                      title: Text(funcionario["cpf"].toString()),
                       subtitle: Text(funcionario["funcao"].toString()),
                       trailing: SizedBox(
                         width: 100,
@@ -112,8 +71,10 @@ class _ListaFuncionarioDinamicoState extends State<ListaFuncionarioDinamico> {
                                                 excluir(int.parse(
                                                     funcionario['id'].toString()));
                                                 Navigator.push(
-                                                    context, new MaterialPageRoute(
-                                                    builder: (context) => MyApp()
+                                                    context, MaterialPageRoute(
+                                                    builder: (context) => MyApp(
+                                                    ),
+
                                                 ));
                                               },
                                             ),
